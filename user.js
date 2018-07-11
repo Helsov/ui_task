@@ -23,7 +23,7 @@ module.exports = {
 			console.log(username,password);
 			db.collection('user').findOne( { email : username ,password: password 
 			}, (err, result) => {
-				if(result==null){
+				if(result){
 					console.log('returning false')
 					callback(false)
 				}

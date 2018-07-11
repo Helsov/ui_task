@@ -20,7 +20,9 @@ class Signin extends React.Component {
         password: this.state.password
       })
       .then(function (response) {
-        console.log(response);
+        if(response.data == 'Success'){
+          window.location.assign('http://localhost:3000/home');
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -63,18 +65,29 @@ class Signup extends React.Component{
     this.state = {
       name:'',
       email:'',
-      password:''
+      password:'',
+      succesText: '',
     };
   }
+
+  popUp(){
+    this.setState({
+      succesText: 'Спасибо за регистрацию, теперь вы можете войти в систему',
+    })
+  }
+  
   handleNameChange(e){
     this.setState({name:e.target.value})
   }
+
   handleEmailChange(e){
     this.setState({email:e.target.value})
   }
+
   handlePasswordChange(e){
     this.setState({password:e.target.value})
   }
+
   signUp(){
     axios.post('/signup', {
       name: this.state.name,
