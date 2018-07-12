@@ -5,14 +5,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>React Blog App</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
-
-
+    <script src="https://fb.me/react-15.1.0.js"></script>
+    <script src="https://fb.me/react-dom-15.1.0.js"></script>
+    <script src="https://npmcdn.com/react-router@3.0.2/umd/ReactRouter.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
+    <!-- <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet"> -->
+    <title>UI Task Tracker ReactJS</title>
 </head>
 
 <body>
@@ -21,11 +21,11 @@
         <div class="header clearfix">
             <nav>
                 <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active">
+                    <li role="presentation" id="homeHyperlink" class="active">
                         <a href="#">Home</a>
                     </li>
-                    <li role="presentation">
-                        <a href="#">Add</a>
+                    <li role="presentation" id="addHyperLink">
+                        <a href="/home#/addPost">Add</a>
                     </li>
                     <li role="presentation">
                         <a href="#">Logout</a>
@@ -35,29 +35,19 @@
             <h3 class="text-muted">React Blog App</h3>
         </div>
 
-        <div class="jumbotron">
-            <div class="list-group">
-                <a href="#" class="list-group-item active">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                </a>
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                </a>
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                </a>
-            </div>
+        <div id="app" class="jumbotron">
+            <div class="text-center">
+                    <img src="./onload.gif"/>
+            </div> 
         </div>
-
 
         <footer class="footer">
             <p>&copy; 2018 Company, Inc.</p>
         </footer>
 
     </div>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel" src="home.jsx"></script>
 </body>
 
 </html>

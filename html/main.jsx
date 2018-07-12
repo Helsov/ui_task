@@ -7,16 +7,16 @@ class Signin extends React.Component {
     constructor(props) {
       super(props);
       this.signIn = this.signIn.bind(this);
-      this.handleEmailChange = this.handleEmailChange.bind(this);
+      this.handleNameChange = this.handleNameChange.bind(this);
       this.handlePasswordChange = this.handlePasswordChange.bind(this);
       this.state = {
-        email:'',
+        name:'',
         password:''
       };
     }
     signIn(){
       axios.post('/signin', {
-        email: this.state.email,
+        name: this.state.name,
         password: this.state.password
       })
       .then(function (response) {
@@ -28,8 +28,8 @@ class Signin extends React.Component {
         console.log(error);
       });
     }
-    handleEmailChange(e){
-      this.setState({email:e.target.value})
+    handleNameChange(e){
+      this.setState({name:e.target.value})
     }
     handlePasswordChange(e){
       this.setState({password:e.target.value})
@@ -38,13 +38,17 @@ class Signin extends React.Component {
       return (
         <div>
           <form className="form-signin">
-            <h2 className="form-signin-heading">Please sign in</h2>
-            <label for="inputEmail" className="sr-only">Email address</label>
-            <input type="email" onChange={this.handleEmailChange} id="inputEmail" className="form-control" placeholder="Email address" required autofocus />
-            <label for="inputPassword" className="sr-only">Password</label>
-            <input type="password" onChange={this.handlePasswordChange} id="inputPassword" className="form-control" placeholder="Password" required />
+            <h2 className="form-signin-heading">Вход в систему</h2>
+            <div className="form-group">
+              <label for="inputName" className="sr-only">Name</label>
+              <input type="name" onChange={this.handleNameChange} id="inputName" className="form-control" placeholder="Name" required autofocus />
+            </div>
+            <div className="form-group">
+              <label for="inputPassword" className="sr-only">Password</label>
+              <input type="password" onChange={this.handlePasswordChange} id="inputPassword" className="form-control" placeholder="Password" required />
+            </div>
             
-            <button className="btn btn-lg btn-primary btn-block" onClick={this.signIn} type="button">Sign in</button>
+            <button className="btn btn-lg btn-primary btn-block" onClick={this.signIn} type="button">Войти</button>
           </form>
           <div>
             <Link to="/signup">{'Signup'}</Link>
@@ -65,8 +69,7 @@ class Signup extends React.Component{
     this.state = {
       name:'',
       email:'',
-      password:'',
-      succesText: '',
+      password:''
     };
   }
   
@@ -83,16 +86,16 @@ class Signup extends React.Component{
   }
 
   signUp(){
+    this.setState({
+       succesText:'✔ Спасибо за регистрацию, теперь вы можете войти в систему'
+    });
     axios.post('/signup', {
       name: this.state.name,
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
     })
     .then(function (response) {
       console.log(response);
-      this.setState({
-        succesText: 'Спасибо за регистрацию, теперь вы можете войти в систему',
-      })
     })
     .catch(function (error) {
       console.log(error);
@@ -102,16 +105,21 @@ class Signup extends React.Component{
       return (
         <div>
           <form className="form-signin">
-            <h2 className="form-signin-heading">Please sign up</h2>
-            <div>{this.succesText}</div>
-            <label for="inputName" className="sr-only">Name</label>
-            <input type="name" onChange={this.handleNameChange} id="inputName" className="form-control" placeholder="Name" required autofocus />
-            <label for="inputEmail" className="sr-only">Email address</label>
-            <input type="email" onChange={this.handleEmailChange} id="inputEmail" className="form-control" placeholder="Email address" required autofocus />
-            <label for="inputPassword" className="sr-only">Password</label>
-            <input type="password" onChange={this.handlePasswordChange} id="inputPassword" className="form-control" placeholder="Password" required />
-            
-            <button className="btn btn-lg btn-primary btn-block" onClick={this.signUp} type="button">Sign up</button>
+            <h2 className="form-signin-heading">Регистрация</h2>
+            <div className="form-group">
+              <label for="inputName" className="sr-only">Name</label>
+              <input type="name" onChange={this.handleNameChange} id="inputName" className="form-control" placeholder="Name" required autofocus />
+            </div>
+            <div className="form-group">
+              <label for="inputEmail" className="sr-only">Email address</label>
+              <input type="email" onChange={this.handleEmailChange} id="inputEmail" className="form-control" placeholder="Email address" required autofocus />
+            </div>
+            <div className="form-group">
+              <label for="inputPassword" className="sr-only">Password</label>
+              <input type="password" onChange={this.handlePasswordChange} id="inputPassword" className="form-control" placeholder="Password" required />
+            </div>
+            <div onClick={this.popUp}>
+            <button className="btn btn-lg btn-primary btn-block" onClick={this.signUp} type="button">Зарегистрироваться</button></div>
           </form>
           <div>
             <Link to="/">{'Signin'}</Link>
