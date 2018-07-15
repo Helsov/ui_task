@@ -53,16 +53,46 @@ app.post('/addpost',(req, res)=>{
   var name = sessions.username;
   var title = req.body.title;
   var subject = req.body.subject;
-  post.addPost(name, title, subject, (result) => {
-    res.send(result);
-  })
+  var id = req.body.id;
+console.log(id);
+  if(id == '' || id == undefined){
+    console.log('Запись создана')
+    post.addPost(name, title, subject, (result)=>{
+      res.send(result)
+    })
+  } else {
+    console.log('Запись изменена', title, subject)
+    post.updatePost(id, title, subject, (result)=>{
+      res.send(result)
+    })
+  }
 })
 
+//Получение данных
 app.post('/getpost', (req, res) => {
   post.getPost((result) => {
     res.send(result)
   })
 })
+
+//Делаем запрос данных для получения информации о редактируемой статье
+app.post('/getPostWithId', (req, res) => {
+  var id = req.body.id;
+  console.log(req.body);
+  post.getPostWithId(id,(result) => {
+    res.send(result)
+    console.log(result)
+  })
+})
+
+//Запрос на удаление поста
+app.post('/deletePost', (req, res) => {
+  var id = req.body.id;
+  post.deletePost(id, (result) => {
+    res.send(result)
+  })
+})
+
 
 //404 ошибка
 app.use(function(req, res, next) {
