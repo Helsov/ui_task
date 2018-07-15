@@ -50,9 +50,10 @@ app.get('/home', (req, res)=>{
 
 //Обработчик отправки данных в БД, в нашем случае добавляем новую запись
 app.post('/addpost',(req, res)=>{
+  var name = sessions.username;
   var title = req.body.title;
   var subject = req.body.subject;
-  post.addPost(title, subject, (result) => {
+  post.addPost(name, title, subject, (result) => {
     res.send(result);
   })
 })
@@ -62,6 +63,11 @@ app.post('/getpost', (req, res) => {
     res.send(result)
   })
 })
+
+//404 ошибка
+app.use(function(req, res, next) {
+  res.status(404).sendFile(__dirname + '/html/404.html');
+});
 
 //Подключаемся к порту 30000
 app.listen(3000, () => {

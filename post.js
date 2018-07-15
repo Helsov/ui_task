@@ -2,10 +2,11 @@ const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const url = 'mongodb://localhost';
 
-addPost =  (title, subject, callback) => {
+addPost =  (name, title, subject, callback) => {
     MongoClient.connect(url, (err, client) => {
         const db = client.db('Blog'); 
         db.collection('post').insertOne( {
+            "name": name,
             "title": title,
             "subject": subject
         }, (err, result) => {
