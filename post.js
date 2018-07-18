@@ -4,13 +4,18 @@ const assert = require('assert');
 const url = 'mongodb://localhost';
 
 //Добавляем новую запись в post
-addPost =  (name, title, subject, callback) => {
+addPost =  (name, title, subject, status, priority, planned, spend, date, callback) => {
     MongoClient.connect(url, (err, client) => {
         const db = client.db('Blog'); 
         db.collection('post').insertOne( {
             "name": name,
             "title": title,
-            "subject": subject
+            "subject": subject,
+            "status": status,
+            "priority": priority,
+            "planned": planned,
+            "spend": spend,
+            "date": date
         }, (err, result) => {
             assert.equal(err, null);
             if(err == null){
@@ -23,12 +28,14 @@ addPost =  (name, title, subject, callback) => {
     });
 }
 
-//Получаем данные из БД из таблицы post
-getPost = (callback) =>{
+//Получаем данные из БД из таблицы post по имени пользователя
+getPost = (name, callback) =>{
     MongoClient.connect(url, (err, client) => {
         const db = client.db('Blog');
         db.collection('post',(err, collection)=>{
-            collection.find().toArray((err, list) => {
+            collection.find(
+                {"name": name}
+            ).toArray((err, list) => {
                 callback(list)
             })
         })
@@ -52,14 +59,18 @@ getPostWithId = (id, callback) => {
 }
 
 //Делаем запрос на обновление поста
-updatePost = (id, title, subject, callback) => {
+updatePost = (id, title, subject, status, priority, planned, spend, callback) => {
     MongoClient.connect(url, (err, client) => {
             const db = client.db('Blog');
             db.collection('post').updateOne( 
                 { "_id": new mongodb.ObjectID(id) },
               { $set: 
                   { "title" : title,
-                    "subject" : subject 
+                    "subject" : subject,
+                    "status": status,
+                    "priority": priority,
+                    "planned": planned,
+                    "spend": spend, 
                   }
               }, (err, result) => {
             assert.equal(err, null);
@@ -77,7 +88,7 @@ deletePost = (id, callback) => {
             _id: new mongodb.ObjectID(id)
         },(err, result) => {
             assert.equal(err, null);
-            console.log('Элемент удален');
+            console.log('Элемент удален', id);
             err == null ? callback(true) : callback(false)
         })
     })

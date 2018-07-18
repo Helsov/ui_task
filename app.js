@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 var sessions;
 
 //Разбиваем данные из json
+//Создаем сессию авторизованного пользователя
 app.post('/signin', (req, res) => {
   sessions = req.session;
   var user_name = req.body.name;
@@ -44,7 +45,7 @@ app.get('/home', (req, res)=>{
   if(sessions && sessions.username){
     res.sendFile(__dirname + '/html/home.html')
   } else {
-    res.sendFile(__dirname + '/html/index.html');
+    res.redirect('/');
   }
 })
 
@@ -53,16 +54,21 @@ app.post('/addpost',(req, res)=>{
   var name = sessions.username;
   var title = req.body.title;
   var subject = req.body.subject;
+  var status = req.body.status;
+  var priority = req.body.priority;
+  var planned = req.body.planned;
+  var spend = req.body.spend;
+  var date = req.body.date;
   var id = req.body.id;
 console.log(id);
   if(id == '' || id == undefined){
     console.log('Запись создана')
-    post.addPost(name, title, subject, (result)=>{
+    post.addPost(name, title, subject, status, priority, planned, spend, date, (result)=>{
       res.send(result)
     })
   } else {
-    console.log('Запись изменена', title, subject)
-    post.updatePost(id, title, subject, (result)=>{
+    console.log('Запись изменена', title, subject, status, priority, planned, spend)
+    post.updatePost(id, title, subject, status, priority, planned, spend, (result)=>{
       res.send(result)
     })
   }
@@ -70,7 +76,8 @@ console.log(id);
 
 //Получение данных
 app.post('/getpost', (req, res) => {
-  post.getPost((result) => {
+  var name = sessions.username;
+  post.getPost(name, (result) => {
     res.send(result)
   })
 })

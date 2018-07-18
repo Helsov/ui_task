@@ -31,7 +31,7 @@ class ShowPost extends React.Component {
         axios.post('/getPost', {
         })
         .then((response) => {
-          console.log('Запись удалена ',response);
+          console.log('Полученные данные ',response);
           self.setState({posts:response.data})
         })
         .catch((error) => {
@@ -47,7 +47,7 @@ class ShowPost extends React.Component {
                 id: id
             })
             .then((response) => {
-                console.log(response);
+                console.log("Запись удалена", response);
                 self.getPost();
             })
             .catch((err) => {
@@ -63,9 +63,14 @@ class ShowPost extends React.Component {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Имя</th>
-                        <th>Заголовок</th>
+                        <th>Создатель</th>
+                        <th>Название</th>
+                        <th>Статус выполнения</th>
                         <th>Описание</th>
+                        <th>Приоритет</th>
+                        <th>Планируемое время</th>
+                        <th>Затраченное время</th>
+                        <th>Дата</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -77,7 +82,12 @@ class ShowPost extends React.Component {
                                         <th>{index + 1}</th>
                                         <th>{post.name}</th>
                                         <th>{post.title}</th>
+                                        <th>{post.status}</th>
                                         <th>{post.subject}</th>
+                                        <th>{post.priority}</th>
+                                        <th>{post.planned}</th>
+                                        <th>{post.spend}</th>
+                                        <th>{post.date}</th>
                                         <th><span onClick={this.updatePost.bind(this, post._id)} className="glyphicon glyphicon-pencil"></span></th>
                                         <th><span onClick={this.deletePost.bind(this,post._id)} className="glyphicon glyphicon-remove"></span></th>
                                     </tr>
@@ -95,12 +105,21 @@ class AddPost extends React.Component {
         this.state = {
             title: '',
             subject: '',
-            id: ''
+            id: '',
+            status: '',
+            priority: '',
+            planned: '00:00',
+            spend: '00:00',
+            date: ''
         }
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleSubjectChange = this.handleSubjectChange.bind(this)
         this.addPost = this.addPost.bind(this)
         this.getPostWithId = this.getPostWithId.bind(this);
+        this.handlePriority = this.handlePriority.bind(this);
+        this.handleStatus = this.handleStatus.bind(this);
+        this.handlePlanned = this.handlePlanned.bind(this);
+        this.handleSpend = this.handleSpend.bind(this);
     }
 
     componentDidMount(){
@@ -122,11 +141,51 @@ class AddPost extends React.Component {
         })
     }
 
+    handlePriority(e){
+        this.setState({
+            priority: e.target.value
+        })
+        e.preventDefault();
+    }
+
+    handleStatus(e){
+        this.setState({
+            status: e.target.value
+        })
+        e.preventDefault();
+    }
+
+    handlePlanned(e){
+        console.log(e);
+        this.setState({
+            planned: e.target.value
+        })
+    }
+
+    handleSpend(e){
+        console.log(e);
+        this.setState({
+            spend: e.target.value
+        })
+    }
+
+    //Добавляем данные для создания нового поста
     addPost(){
+        const myDate = new Date();
+        const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", 
+            "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+        const fullDate = `${myDate.getDate()} ${months[myDate.getMonth()]} ${myDate.getFullYear()}`;
+
         axios.post('/addPost',{
             title: this.state.title,
             subject: this.state.subject,
-            id: this.props.params.id
+            id: this.props.params.id,
+            status: this.state.status,
+            priority: this.state.priority,
+            planned: this.state.planned,
+            spend: this.state.spend,
+            date: fullDate
+
         })
         .then((response) => {
             console.log(`Запись добавлена`, response);
@@ -139,7 +198,6 @@ class AddPost extends React.Component {
 
     //Получаем данные редактируемой записи задаем новый урл /getPostWithId
     getPostWithId(){
-        console.log(this.props.params.id);
         var id = this.props.params.id;
         var self = this;
         axios.post('/getPostWithId',{
@@ -148,8 +206,12 @@ class AddPost extends React.Component {
         .then((response) => {
             if(response){
               self.setState({
-                  title:response.data.title,
-                  subject:response.data.subject
+                  title: response.data.title,
+                  subject: response.data.subject,
+                  status: response.data.status,
+                  priority: response.data.priority,
+                  planned: response.data.planned,
+                  spend: response.data.spend
             });
             }
           })
@@ -165,12 +227,46 @@ class AddPost extends React.Component {
                     <form role="form">
                         <br styles="clear:both"/>
                         <div className="form-group">
-                            <input value={this.state.title} type="text" onChange={this.handleTitleChange} className="form-control" id="title" placeholder="Заголовок" required/>
+                            <input value={this.state.title} type="text" onChange={this.handleTitleChange} className="form-control" id="title" placeholder="Название" required/>
                         </div>
                         <div className="form-group">
                             <textarea value={this.state.subject} className="form-control" onChange={this.handleSubjectChange} type="textarea" id="subject" placeholder="Описание" maxlength="140" rows="7"></textarea>
                         </div>
+                        <div className="bs-example">
+                        <div className="form-inline" role="form">
+                            <div className="form-group">
+                                <h5>Статус</h5>
+                                <select id="status" value={this.state.status} onChange={this.handleStatus} className="form-control input-md">
+                                    <option value=""></option>
+                                    <option value="Новое">Новое</option>
+                                    <option value="В процессе">В процессе</option>
+                                    <option value="Готово">Готово</option>
+                                </select>
+                            </div>
+                            &nbsp;
+                            <div className="form-group">
+                                <h5>Приоритет</h5>
+                                <select id="priority" value={this.state.priority} onChange={this.handlePriority} className="form-control input-md">
+                                    <option value=""></option>
+                                    <option value="Высокий">Высокий</option>
+                                    <option value="Средний">Средний</option>
+                                    <option value="Низкий">Низкий</option>
+                                </select>
+                            </div>
+                            &nbsp;
+                            <div className="form-group">
+                                <h5>Планируемое время</h5>
+                                <input value={this.state.planned} id="planned" onChange={this.handlePlanned} type="time" className="form-control" size="1"/>
+                            </div>
+                            &nbsp;
+                            <div className="form-group">
+                                <h5>Затраченное время</h5>
+                                <input value={this.state.spend} id="spend" onChange={this.handleSpend} type="time" className="form-control" size="1"/>
+                            </div>
+                        </div>
+                        </div>
                         <button type="button" id="submit" onClick={this.addPost} name="submit" className="btn btn-primary pull-right">Создать/Изменить</button>
+                        <div className="clearfix"></div>
                     </form>
                 </div>
             </div>

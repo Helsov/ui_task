@@ -69,10 +69,22 @@ class Signup extends React.Component{
     this.state = {
       name:'',
       email:'',
-      password:''
+      password:'',
+      succesText: ''
     };
   }
   
+ 
+  updateText(){
+    return !this.state.succesText ? "" :  (
+      <div className="hidden-on">
+        <div className="col-xs-12">
+          <span className="visible-lg">{this.state.succesText}</span>
+        </div>
+      </div>
+    );
+  }
+
   handleNameChange(e){
     this.setState({name:e.target.value})
   }
@@ -87,8 +99,9 @@ class Signup extends React.Component{
 
   signUp(){
     this.setState({
-       succesText:'✔ Спасибо за регистрацию, теперь вы можете войти в систему'
-    });
+      succesText:'✔ Спасибо за регистрацию, теперь вы можете войти в систему'
+   });
+
     axios.post('/signup', {
       name: this.state.name,
       email: this.state.email,
@@ -96,6 +109,7 @@ class Signup extends React.Component{
     })
     .then(function (response) {
       console.log(response);
+      response ? hashHistory.push('/') : undefined;
     })
     .catch(function (error) {
       console.log(error);
@@ -121,6 +135,7 @@ class Signup extends React.Component{
             <div onClick={this.popUp}>
             <button className="btn btn-lg btn-primary btn-block" onClick={this.signUp} type="button">Зарегистрироваться</button></div>
           </form>
+          {this.updateText()}
           <div>
             <Link to="/">{'Signin'}</Link>
           </div>
