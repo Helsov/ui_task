@@ -106,7 +106,8 @@ app.use(function(req, res, next) {
   res.status(404).sendFile(__dirname + '/html/404.html');
 });
 
+var port = process.env.PORT || 3000;
 //Подключаемся к порту 30000
-app.listen(3000, () => {
-    console.log("Погнали", 3000);
+app.listen(port, () => {
+    console.log("Listening on", port);
 })
