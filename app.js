@@ -3,7 +3,6 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const user = require('./user');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
 const post = require('./post');
 
 const app = express();
