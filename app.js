@@ -8,10 +8,7 @@ const post = require('./post');
 const app = express();
 //Основная часть бэкенда на NodeJS. Передаем данные со стороны клиента на сервер
 //Главная страница приложеиня и метод для "разбора" данных в json и создаем сессию
-app.use(express.static(path.join(__dirname,"/html"))).use(session({cookie:{
-  secure: true,
-  maxAge:60000
-     },secret: 'my-secret',store: new MongoStore(), resave: true, saveUninitialized: true}));
+app.use(express.static(path.join(__dirname,"/html"))).use(session({secret: 'my-secret', resave: true, saveUninitialized: true}));
 
 app.use(bodyParser.json());
 
@@ -109,8 +106,9 @@ app.use(function(req, res, next) {
   res.status(404).sendFile(__dirname + '/html/404.html');
 });
 
-var port = process.env.PORT || 3000;
+
 //Подключаемся к порту 30000
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log("Listening on ", port);
 })
