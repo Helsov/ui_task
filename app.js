@@ -3,24 +3,16 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const user = require('./user');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const post = require('./post');
 
 const app = express();
-
-app.set('trust proxy', 1);
-
-
 //Основная часть бэкенда на NodeJS. Передаем данные со стороны клиента на сервер
 //Главная страница приложеиня и метод для "разбора" данных в json и создаем сессию
-app.use(express.static(path.join(__dirname,"/html")))
-.use(session({cookie:{secure: true, maxAge:60000}, secret: 'my-secret', resave: false, saveUninitialized: true}));
-
-app.use(function(req,res,next){
-  if(!req.session){
-      return next(new Error('Oh no')) //handle error
-  }
-  next() //otherwise continue
-  });
+app.use(express.static(path.join(__dirname,"/html"))).use(session({cookie:{
+  secure: true,
+  maxAge:60000
+     },secret: 'my-secret',store: new MongoStore(), resave: true, saveUninitialized: true}));
 
 app.use(bodyParser.json());
 
@@ -121,5 +113,5 @@ app.use(function(req, res, next) {
 var port = process.env.PORT || 3000;
 //Подключаемся к порту 30000
 app.listen(port, () => {
-    console.log("Listening on", port);
+    console.log("Listening on ", port);
 })
