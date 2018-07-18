@@ -6,9 +6,21 @@ const session = require('express-session');
 const post = require('./post');
 
 const app = express();
+
+app.set('trust proxy', 1);
+
+
 //Основная часть бэкенда на NodeJS. Передаем данные со стороны клиента на сервер
 //Главная страница приложеиня и метод для "разбора" данных в json и создаем сессию
-app.use(express.static(path.join(__dirname,"/html"))).use(session({secret: 'my-secret', resave: true, saveUninitialized: true}));
+app.use(express.static(path.join(__dirname,"/html")))
+.use(session({cookie:{secure: true, maxAge:60000}, store: new RedisStore(), secret: 'my-secret', resave: false, saveUninitialized: true}));
+
+app.use(function(req,res,next){
+  if(!req.session){
+      return next(new Error('Oh no')) //handle error
+  }
+  next() //otherwise continue
+  });
 
 app.use(bodyParser.json());
 
