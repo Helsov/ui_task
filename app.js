@@ -45,7 +45,7 @@ app.get('/home', (req, res)=>{
   if(sessions && sessions.username){
     res.sendFile(__dirname + '/html/home.html')
   } else {
-    res.redirect('/');
+    res.redirect('/')
   }
 })
 

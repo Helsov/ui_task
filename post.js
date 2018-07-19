@@ -1,12 +1,12 @@
 const mongodb = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-const url = 'mongodb://localhost';
+const url = 'mongodb://admin:admin1234@ds243041.mlab.com:43041/mydatabase';
 
 //Добавляем новую запись в post
 addPost =  (name, title, subject, status, priority, planned, spend, date, callback) => {
     MongoClient.connect(url, (err, client) => {
-        const db = client.db('Blog'); 
+        const db = client.db('mydatabase'); 
         db.collection('post').insertOne( {
             "name": name,
             "title": title,
@@ -31,7 +31,7 @@ addPost =  (name, title, subject, status, priority, planned, spend, date, callba
 //Получаем данные из БД из таблицы post по имени пользователя
 getPost = (name, callback) =>{
     MongoClient.connect(url, (err, client) => {
-        const db = client.db('Blog');
+        const db = client.db('mydatabase');
         db.collection('post',(err, collection)=>{
             collection.find(
                 {"name": name}
@@ -45,7 +45,7 @@ getPost = (name, callback) =>{
 //Получаем данные о записи из БД по определенному идентификатору
 getPostWithId = (id, callback) => {
     MongoClient.connect(url, (err, client) => {
-        const db = client.db('Blog');
+        const db = client.db('mydatabase');
         db.collection('post').findOne({
             _id: new mongodb.ObjectID(id)
         },
@@ -61,7 +61,7 @@ getPostWithId = (id, callback) => {
 //Делаем запрос на обновление поста
 updatePost = (id, title, subject, status, priority, planned, spend, callback) => {
     MongoClient.connect(url, (err, client) => {
-            const db = client.db('Blog');
+            const db = client.db('mydatabase');
             db.collection('post').updateOne( 
                 { "_id": new mongodb.ObjectID(id) },
               { $set: 
@@ -83,7 +83,7 @@ updatePost = (id, title, subject, status, priority, planned, spend, callback) =>
 //Делаем запрос на удаление поста
 deletePost = (id, callback) => {
     MongoClient.connect(url, (err, client) => {
-        var db = client.db('Blog');
+        var db = client.db('mydatabase');
         db.collection('post').deleteOne({
             _id: new mongodb.ObjectID(id)
         },(err, result) => {
