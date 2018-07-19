@@ -8,7 +8,7 @@ const post = require('./post');
 const app = express();
 //Основная часть бэкенда на NodeJS. Передаем данные со стороны клиента на сервер
 //Главная страница приложеиня и метод для "разбора" данных в json и создаем сессию
-app.use(express.static(path.join(__dirname,"/html"))).use(session({secret: 'my-secret', resave: true, saveUninitialized: true}));
+app.use(express.static(path.join(__dirname,"/html"))).use(session({secret: '0GBldsyunb9EKBt2ZbuiGLAUgr43kswp6xXK', resave: true, saveUninitialized: true}))
 
 app.use(bodyParser.json());
 
@@ -40,6 +40,12 @@ app.post('/signup', (req, res) => { //Принимаем обработанны�
   name && email && password ? user.signup(name, email, password) : res.send('Failure');
 })
 
+//Выход из системы
+app.get('/logout', (req, res) => {
+  sessions.username = null;
+  res.redirect('/');
+});
+
 //Добавляем новую страницу, в случае совпадения сессии и имени то перенаправлять в Home
 app.get('/home', (req, res)=>{
   if(sessions && sessions.username){
@@ -60,15 +66,16 @@ app.post('/addpost',(req, res)=>{
   var spend = req.body.spend;
   var date = req.body.date;
   var id = req.body.id;
+  var levelPriority = req.body.levelPriority
 console.log(id);
   if(id == '' || id == undefined){
     console.log('Запись создана')
-    post.addPost(name, title, subject, status, priority, planned, spend, date, (result)=>{
+    post.addPost(name, title, subject, status, priority, planned, spend, date, levelPriority, (result)=>{
       res.send(result)
     })
   } else {
-    console.log('Запись изменена', title, subject, status, priority, planned, spend)
-    post.updatePost(id, title, subject, status, priority, planned, spend, (result)=>{
+    console.log('Запись изменена', title, subject, status, priority, planned, spend, levelPriority)
+    post.updatePost(id, title, subject, status, priority, planned, spend, levelPriority, (result)=>{
       res.send(result)
     })
   }

@@ -11,6 +11,7 @@ class ShowPost extends React.Component {
         }
         this.updatePost = this.updatePost.bind(this);
         this.deletePost = this.deletePost.bind(this);
+
     }
 
     //Получаем данные из БД и сохраняем в массив через компонент который вызывется после рендеринга компонента, удобен для запроса к удаленным ресурсам
@@ -56,6 +57,19 @@ class ShowPost extends React.Component {
         }
     }
 
+    //Сортировка по приоритету
+    sortPost(){
+        var compareNumeric = (a, b) => {
+            if(a.levelPriority > b.levelPriority) return -1;
+            if(a.levelPriority < b.levelPriority) return 1;
+        }
+        var posts =  this.state.posts.sort(compareNumeric);
+        console.log(posts)
+        this.setState({
+            posts: posts
+        })
+
+    }
 
     render(){
         return(
@@ -67,7 +81,7 @@ class ShowPost extends React.Component {
                         <th>Название</th>
                         <th>Статус выполнения</th>
                         <th>Описание</th>
-                        <th>Приоритет</th>
+                        <th>Приоритет^</th>
                         <th>Планируемое время</th>
                         <th>Затраченное время</th>
                         <th>Дата</th>
@@ -84,7 +98,7 @@ class ShowPost extends React.Component {
                                         <th>{post.title}</th>
                                         <th>{post.status}</th>
                                         <th>{post.subject}</th>
-                                        <th>{post.priority}</th>
+                                        <th onClick={this.sortPost.bind(this)}>{post.priority}</th>
                                         <th>{post.planned}</th>
                                         <th>{post.spend}</th>
                                         <th>{post.date}</th>
@@ -110,7 +124,8 @@ class AddPost extends React.Component {
             priority: '',
             planned: '00:00',
             spend: '00:00',
-            date: ''
+            date: '',
+            levelPriority: ''
         }
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleSubjectChange = this.handleSubjectChange.bind(this)
@@ -176,6 +191,12 @@ class AddPost extends React.Component {
             "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
         const fullDate = `${myDate.getDate()} ${months[myDate.getMonth()]} ${myDate.getFullYear()}`;
 
+        const levelPriority = {
+            "Высокий": 1,
+            "Средний": 2,
+            "Низкий": 3
+        }
+        
         axios.post('/addPost',{
             title: this.state.title,
             subject: this.state.subject,
@@ -184,7 +205,8 @@ class AddPost extends React.Component {
             priority: this.state.priority,
             planned: this.state.planned,
             spend: this.state.spend,
-            date: fullDate
+            date: fullDate,
+            levelPriority: levelPriority[this.state.priority]
 
         })
         .then((response) => {
@@ -211,7 +233,8 @@ class AddPost extends React.Component {
                   status: response.data.status,
                   priority: response.data.priority,
                   planned: response.data.planned,
-                  spend: response.data.spend
+                  spend: response.data.spend,
+                  levelPriority: response.data.levelPriority
             });
             }
           })

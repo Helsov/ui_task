@@ -79,7 +79,7 @@ class Signup extends React.Component{
     return !this.state.succesText ? "" :  (
       <div className="hidden-on">
         <div className="col-xs-12">
-          <span className="visible-lg">{this.state.succesText}</span>
+          <span className="visible-lg" style={{color: "green"}}>{this.state.succesText}</span>
         </div>
       </div>
     );

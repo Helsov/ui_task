@@ -4,7 +4,7 @@ const assert = require('assert');
 const url = 'mongodb://admin:admin1234@ds243041.mlab.com:43041/mydatabase';
 
 //Добавляем новую запись в post
-addPost =  (name, title, subject, status, priority, planned, spend, date, callback) => {
+addPost =  (name, title, subject, status, priority, planned, spend, date, levelPriority, callback) => {
     MongoClient.connect(url, (err, client) => {
         const db = client.db('mydatabase'); 
         db.collection('post').insertOne( {
@@ -15,7 +15,8 @@ addPost =  (name, title, subject, status, priority, planned, spend, date, callba
             "priority": priority,
             "planned": planned,
             "spend": spend,
-            "date": date
+            "date": date,
+            "levelPriority": levelPriority
         }, (err, result) => {
             assert.equal(err, null);
             if(err == null){
@@ -59,7 +60,7 @@ getPostWithId = (id, callback) => {
 }
 
 //Делаем запрос на обновление поста
-updatePost = (id, title, subject, status, priority, planned, spend, callback) => {
+updatePost = (id, title, subject, status, priority, planned, spend, levelPriority, callback) => {
     MongoClient.connect(url, (err, client) => {
             const db = client.db('mydatabase');
             db.collection('post').updateOne( 
@@ -70,7 +71,8 @@ updatePost = (id, title, subject, status, priority, planned, spend, callback) =>
                     "status": status,
                     "priority": priority,
                     "planned": planned,
-                    "spend": spend, 
+                    "spend": spend,
+                    "levelPriority": levelPriority 
                   }
               }, (err, result) => {
             assert.equal(err, null);
