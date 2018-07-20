@@ -7,7 +7,8 @@ class ShowPost extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            posts: []
+            posts: [],
+            sort: false
         }
         this.updatePost = this.updatePost.bind(this);
         this.deletePost = this.deletePost.bind(this);
@@ -60,12 +61,15 @@ class ShowPost extends React.Component {
     //Сортировка по приоритету
     sortPost(){
         var compareNumeric = (a, b) => {
-            if(a.levelPriority > b.levelPriority) return -1;
-            if(a.levelPriority < b.levelPriority) return 1;
+            if(a.levelPriority > b.priority && this.state.sort == false) return -1;
+            if(a.levelPriority < b.priority  && this.state.sort == true) return this.setState({
+                sort: false
+            })
+            return 1;
         }
         var posts =  this.state.posts.sort(compareNumeric);
-        console.log(posts)
         this.setState({
+            sort: true,
             posts: posts
         })
 
@@ -81,7 +85,7 @@ class ShowPost extends React.Component {
                         <th>Название</th>
                         <th>Статус выполнения</th>
                         <th>Описание</th>
-                        <th>Приоритет^</th>
+                        <th><button onClick={this.sortPost.bind(this)} type="button" className="btn btn-default">Приоритет</button></th>
                         <th>Планируемое время</th>
                         <th>Затраченное время</th>
                         <th>Дата</th>
@@ -98,7 +102,7 @@ class ShowPost extends React.Component {
                                         <th>{post.title}</th>
                                         <th>{post.status}</th>
                                         <th>{post.subject}</th>
-                                        <th onClick={this.sortPost.bind(this)}>{post.priority}</th>
+                                        <th>{post.priority}</th>
                                         <th>{post.planned}</th>
                                         <th>{post.spend}</th>
                                         <th>{post.date}</th>
@@ -171,14 +175,12 @@ class AddPost extends React.Component {
     }
 
     handlePlanned(e){
-        console.log(e);
         this.setState({
             planned: e.target.value
         })
     }
 
     handleSpend(e){
-        console.log(e);
         this.setState({
             spend: e.target.value
         })
@@ -238,7 +240,7 @@ class AddPost extends React.Component {
             });
             }
           })
-          .catch( (erro) => {
+          .catch( (error) => {
             console.log('ошибка ',error);
           });
     }
