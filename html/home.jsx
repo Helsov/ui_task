@@ -17,8 +17,8 @@ class ShowPost extends React.Component {
 
     //Получаем данные из БД и сохраняем в массив через компонент который вызывется после рендеринга компонента, удобен для запроса к удаленным ресурсам
     componentDidMount(){
-        document.getElementById('homeHyperlink').className = "active";
-        document.getElementById('addHyperLink').className = "";
+        document.querySelector('#homeHyperlink').className = "active";
+        document.querySelector('#addHyperLink').className = "";
         this.getPost();
     }
 
@@ -61,13 +61,19 @@ class ShowPost extends React.Component {
     //Сортировка по приоритету
     sortPost(){
         var compareNumeric = (a, b) => {
-            if(a.levelPriority > b.priority && this.state.sort == false) return -1;
-            if(a.levelPriority < b.priority  && this.state.sort == true) return this.setState({
+            // if(a.levelPriority > b.levelPriority && this.state.sort == false) return -1;
+            // if(a.levelPriority < b.levelPriority  && this.state.sort == true) return this.setState({
+            //     sort: false
+            // })
+            // return 1;
+            if(this.state.sort == false) return a.levelPriority - b.levelPriority;
+            if(this.state.sort == true) return b.levelPriority - a.levelPriority;
+            return this.setState({
                 sort: false
             })
-            return 1;
         }
         var posts =  this.state.posts.sort(compareNumeric);
+        console.log(posts)
         this.setState({
             sort: true,
             posts: posts
@@ -142,8 +148,8 @@ class AddPost extends React.Component {
     }
 
     componentDidMount(){
-        document.getElementById('addHyperLink').className = "active";
-        document.getElementById('homeHyperlink').className = "";
+        document.querySelector('#addHyperLink').className = "active";
+        document.querySelector('#homeHyperlink').className = "";
 
         this.getPostWithId();
     }
