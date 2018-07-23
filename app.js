@@ -4,11 +4,15 @@ const bodyParser = require("body-parser");
 const user = require('./user');
 const session = require('express-session');
 const post = require('./post');
+const RedisStore = require('connect-redis')(express);
 
 const app = express();
 //Основная часть бэкенда на NodeJS. Передаем данные со стороны клиента на сервер
 //Главная страница приложеиня и метод для "разбора" данных в json и создаем сессию
-app.use(express.static(path.join(__dirname,"/html"))).use(session({secret: '0GBldsyunb9EKBt2ZbuiGLAUgr43kswp6xXK', resave: true, saveUninitialized: true}))
+app.use(express.static(path.join(__dirname,"/html"))).use(session({secret: '0GBldsyunb9EKBt2ZbuiGLAUgr43kswp6xXK',  store: new RedisStore({
+  port: process.env.PORT || 3000,
+  prefix: 'sess'
+}), resave: true, saveUninitialized: true}))
 
 app.use(bodyParser.json());
 
