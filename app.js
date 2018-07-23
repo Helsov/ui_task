@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const user = require('./user');
 const session = require('express-session');
 const post = require('./post');
-const MongoStore = require('connect-mongo');
+const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 //Основная часть бэкенда на NodeJS. Передаем данные со стороны клиента на сервер
