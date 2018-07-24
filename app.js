@@ -48,7 +48,7 @@ app.post('/signup', (req, res) => { //Принимаем обработанны�
 //Выход из системы
 app.get('/logout', (req, res) => {
   sessions.username = null;
-  res.redirect('https://ui-task-reactjs-mongodb-test.herokuapp.com/');
+  res.redirect('/');
 });
 
 //Добавляем новую страницу, в случае совпадения сессии и имени то перенаправлять в Home
@@ -56,7 +56,7 @@ app.get('/home', (req, res)=>{
   if(sessions && sessions.username){
     res.sendFile(__dirname + '/html/home.html')
   } else {
-    res.redirect('https://ui-task-reactjs-mongodb-test.herokuapp.com/')
+    res.redirect('/')
   }
 })
 
@@ -122,5 +122,5 @@ app.use(function(req, res, next) {
 //Подключаемся к порту 30000
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log("Listening on ", port);
+    console.log("Listening on ", port, app.settings.env);
 })
