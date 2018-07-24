@@ -11,7 +11,8 @@ const app = express();
 //Главная страница приложеиня и метод для "разбора" данных в json и создаем сессию
 app.use(express.static(path.join(__dirname,"/html"))).use(session({store: new MongoStore({
   url: 'mongodb://admin:admin1234@ds243041.mlab.com:43041/mydatabase',
-  ttl: 14 * 24 * 60 * 60 // = 14 days. Default
+  ttl: 14 * 24 * 60 * 60, // = 14 days. Default
+  autoReconnect: true,
 }), secret: '0GBldsyunb9EKBt2ZbuiGLAUgr43kswp6xXK', resave: true, saveUninitialized: true}))
 
 app.use(bodyParser.json());
