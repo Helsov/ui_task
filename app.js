@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname,"/html"))).use(session({store: new Mo
 }), secret: '0GBldsyunb9EKBt2ZbuiGLAUgr43kswp6xXK', resave: true, saveUninitialized: true}))
 
 app.use(bodyParser.json());
-
+console.log("Путь", __dirname);
 var sessions;
 
 //Разбиваем данные из json
