@@ -48,7 +48,7 @@ app.post('/signup', (req, res) => { //Принимаем обработанны�
 //Выход из системы
 app.get('/logout', (req, res) => {
   sessions.username = null;
-  res.redirect('/');
+  res.redirect('https://ui-task-reactjs-mongodb-test.herokuapp.com/');
 });
 
 //Добавляем новую страницу, в случае совпадения сессии и имени то перенаправлять в Home
@@ -56,7 +56,7 @@ app.get('/home', (req, res)=>{
   if(sessions && sessions.username){
     res.sendFile(__dirname + '/html/home.html')
   } else {
-    res.redirect('/')
+    res.redirect('https://ui-task-reactjs-mongodb-test.herokuapp.com/')
   }
 })
 
